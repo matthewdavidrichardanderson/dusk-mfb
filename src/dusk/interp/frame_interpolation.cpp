@@ -1,6 +1,7 @@
 #include "dusk/interp/frame_interpolation.h"
 
 #include "dusk/game_clock.h"
+#include "dusk/interp/dual_buffer.h"
 #include "dusk/interp/lerp.h"
 
 #include "mtx.h"
@@ -104,6 +105,7 @@ void clear_interpolation_history() {
     s_previousRecording = {};
     s_currentRecording = {};
     clear_replacements();
+    dusk::interp::clear_owned_buffers();
     clear_callbacks();
     dusk::interp::camera_invalidate_snapshots();
     s_presentationDepth = 0;
@@ -148,6 +150,10 @@ void begin_simulation_frame() {
 
 bool is_enabled() {
     return game_clock::g_frameTiming.interpolating;
+}
+
+bool should_capture() {
+    return is_enabled() && game_clock::is_sim_frame();
 }
 
 void begin_record() {
