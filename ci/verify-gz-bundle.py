@@ -12,7 +12,7 @@ def verify(bundle, native_library=None):
     archive = None
     if bundle.suffix == ".apk":
         with zipfile.ZipFile(bundle) as apk:
-            archive = zipfile.ZipFile(io.BytesIO(apk.read("assets/mods/dusk_gz.dusk")))
+            archive = zipfile.ZipFile(io.BytesIO(apk.read("assets/mods/dusklight_gz.dusk")))
     elif bundle.is_file():
         archive = zipfile.ZipFile(bundle)
     try:
