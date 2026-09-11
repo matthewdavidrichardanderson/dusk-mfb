@@ -138,9 +138,19 @@ void dusk::audio::ApplySettings() {
 }
 
 void dusk::audio::Reinitialize() {
-    if (InitSDL3Output()) {
+    // don't re-init unless we've initialized first (using PlaybackStream being set as proxy)
+    if (PlaybackStream && InitSDL3Output()) {
         SDL_ResumeAudioStreamDevice(PlaybackStream);
     }
+}
+
+void dusk::audio::Shutdown() {
+    if (PlaybackStream) {
+        SDL_DestroyAudioStream(PlaybackStream);
+        PlaybackStream = nullptr;
+    }
+
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
 void dusk::audio::SetMasterVolume(const f32 value) {
